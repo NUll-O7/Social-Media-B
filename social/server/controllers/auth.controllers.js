@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 
 export const signUp = async (req, res) => {
   const { name, userName, email, password } = req.body;
+  console.log(req.body);
   try {
     // Validate User Data
     if (!name || !userName || !email || !password) {
@@ -9,7 +10,7 @@ export const signUp = async (req, res) => {
     }
     // Validate Email
 
-    const existingUserEmail = await User.findOne(email);
+    const existingUserEmail = await User.findOne({email});
 
     if (existingUserEmail) {
       return res.status(400).json({ message: "Email already in use" });
@@ -32,8 +33,8 @@ export const signUp = async (req, res) => {
 
     // Create User
 
-    const newUser = User.create({ name, userName, email, password });
-    res.status(201).send(newUser);
+     User.create({ name, userName, email, password });
+    res.status(201).json({ message: "User created successfully"});
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
