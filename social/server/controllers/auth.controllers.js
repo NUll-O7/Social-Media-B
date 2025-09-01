@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import bcrypt from "bcryptjs";
 
 export const signUp = async (req, res) => {
   const { name, userName, email, password } = req.body;
@@ -31,9 +32,13 @@ export const signUp = async (req, res) => {
         .json({ message: "Password must be at least 6 characters" });
     }
 
+    // Hash Password
+    const salt = await bcrypt.genSalt(10);
+   const hasedPassword=  await bcrypt.hash(password, salt);
+
     // Create User
 
-     User.create({ name, userName, email, password });
+     User.create({ name, userName, email, password: hasedPassword });
     res.status(201).json({ message: "User created successfully"});
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
