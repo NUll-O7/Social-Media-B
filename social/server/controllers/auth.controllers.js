@@ -1,3 +1,4 @@
+import genToken from "../config/token.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
@@ -11,7 +12,7 @@ export const signUp = async (req, res) => {
     }
     // Validate Email
 
-    const existingUserEmail = await User.findOne({email});
+    const existingUserEmail = await User.findOne({ email });
 
     if (existingUserEmail) {
       return res.status(400).json({ message: "Email already in use" });
@@ -26,7 +27,7 @@ export const signUp = async (req, res) => {
     }
 
     // password length
-    if (password.length<=6) {
+    if (password.length <= 6) {
       return res
         .status(400)
         .json({ message: "Password must be at least 6 characters" });
@@ -34,54 +35,51 @@ export const signUp = async (req, res) => {
 
     // Hash Password
     const salt = await bcrypt.genSalt(10);
-   const hasedPassword=  await bcrypt.hash(password, salt);
-   console.log(salt)
+    const hasedPassword = await bcrypt.hash(password, salt);
+    console.log(salt);
 
     // Create User
 
-     User.create({ name, userName, email, password: hasedPassword });
-    res.status(201).json({ message: "User created successfully"});
+    const newUser = User.create({ name, userName, email, password: hasedPassword });
+    
+
+     const token =  await genToken(newUser._id)
+     console.log(token)
+
+    res.status(201).json();
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
- // Sign in Controllers
+// Sign in Controllers
 export const signIn = async (req, res) => {
+  // username and password
+  // need to verify if the user exists or not
+  // bcrypt compare password
+  // we allow the user to log in
 
- // username and password
- // need to verify if the user exists or not
- // bcrypt compare password
- // we allow the user to log in 
+  try {
+    const { userName, password } = req.body;
 
- try {
+    if (!userName || !password) {
+      return res.status(400).json({ message: "All fields Required" });
+    }
 
-   const {userName , password} = req.body
+    const user = await User.findOne({ userName });
 
-   if(!userName || !password){
-    return res.status(400).json({message :'All fields Required'})
-   }
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-   const user = await User.findOne({userName})
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
-   if(!user){
-    return res.status(404).json({message:"User not found"})
-   }
+    if (!passwordMatch) {
+      return res.status(400).json({ message: "Password Incorret" });
+    }
 
-   const passwordMatch = await bcrypt.compare(password , user.password)
-
-   if(!passwordMatch){
-   return res.status(400).json({message:"Password Incorret"})
-   }
-   
-   res.status(200).json({message:'User Logged in'})
-  
- } catch (error) {
-    res.status(500).json({message:"Server Error"})
- }
-
-
-
-  
+    res.status(200).json({ message: "User Logged in" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
 };
-
