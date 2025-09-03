@@ -21,10 +21,7 @@ app.use(express.json());
 app.use('/api/auth' , authRouter)
 
 
-// Basic route
-// app.get('/', (req, res) => {
-//   res.send('Hello World!');
-// });
+
 
 // Start server
 app.listen(PORT, () => {

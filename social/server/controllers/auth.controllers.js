@@ -35,6 +35,7 @@ export const signUp = async (req, res) => {
     // Hash Password
     const salt = await bcrypt.genSalt(10);
    const hasedPassword=  await bcrypt.hash(password, salt);
+   console.log(salt)
 
     // Create User
 
@@ -44,3 +45,43 @@ export const signUp = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+ // Sign in Controllers
+export const signIn = async (req, res) => {
+
+ // username and password
+ // need to verify if the user exists or not
+ // bcrypt compare password
+ // we allow the user to log in 
+
+ try {
+
+   const {userName , password} = req.body
+
+   if(!userName || !password){
+    return res.status(400).json({message :'All fields Required'})
+   }
+
+   const user = await User.findOne({userName})
+
+   if(!user){
+    return res.status(404).json({message:"User not found"})
+   }
+
+   const passwordMatch = await bcrypt.compare(password , user.password)
+
+   if(!passwordMatch){
+   return res.status(400).json({message:"Password Incorret"})
+   }
+   
+   res.status(200).json({message:'User Logged in'})
+  
+ } catch (error) {
+    res.status(500).json({message:"Server Error"})
+ }
+
+
+
+  
+};
+
