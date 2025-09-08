@@ -3,6 +3,7 @@ import logo1 from "../assets/socialLogo.png"
 import logo2 from '../assets/logo2.png'
 import { Link } from "react-router-dom";
 import { signUp } from "../apiCalls/authCalls.js";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -14,6 +15,8 @@ function SignUp() {
     const [userName , setUserName] = useState("");
     const [email , setEmail] = useState("");
     const [password , setPassword] = useState("");
+    const navigate = useNavigate();
+
 
     // Handle SignUp 
     const handleSignUp = async() => {
@@ -32,12 +35,14 @@ function SignUp() {
       try{
         const response = await signUp(user);
         console.log("Sign Up Successful" , response);
-        alert("Sign Up Successful! Please Sign In.");
+        
+         navigate("/home");
         // Clear the form
         setName("");
         setUserName("");
         setEmail("");
         setPassword("");
+
       }catch(error){
         console.error("Error during sign up" , error);
         alert("Sign Up Failed. Please try again.");

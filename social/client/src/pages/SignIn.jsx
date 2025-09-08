@@ -2,9 +2,38 @@ import React , {useState} from "react";
 import logo from "../assets/socialLogo.png";
 import logo2 from "../assets/logo2.png";
 import { Link } from "react-router-dom";
+import { signIn } from "../apiCalls/authCalls.js";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
+   const [userName , setUserName] = useState("");
+   const [password , setPassword] = useState("");
+   const navigate = useNavigate();
 
+   const handleSignIn = async() => {
+    if(!userName || !password){
+      alert("Please fill all the fields");
+      return;
+    }
+
+    const user = {
+      userName,
+      password
+    }
+
+    try{
+      const response =  await signIn(user);
+       
+      console.log("Sign In Successful" , response);
+        navigate("/home");
+      // Clear the form
+      setUserName("");
+      setPassword("");
+    }catch(error){
+      console.error("Error during sign in" , error);
+      alert("Sign In Failed. Please try again.");
+    }
+   }
 
   return (
     <div
@@ -42,6 +71,8 @@ function SignIn() {
               placeholder="Username"
               className="w-[95%] h-[44px] px-3 rounded-md border border-neutral-300 bg-neutral-50 text-neutral-900 text-sm focus:outline-none focus:border-neutral-400"
               required
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               
             />
             <input
@@ -50,7 +81,8 @@ function SignIn() {
               className="w-[95%] h-[44px] px-3 rounded-md border border-neutral-300 bg-neutral-50 text-neutral-900 text-sm focus:outline-none focus:border-neutral-400"
               required  
               type="password"
-            
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -67,6 +99,7 @@ function SignIn() {
               hover:bg-[#0086dd] active:scale-[0.99] transition
               shadow-[0_6px_16px_rgba(0,149,246,0.35)]
             "
+            onClick={handleSignIn}
          
           >
             Sign in
