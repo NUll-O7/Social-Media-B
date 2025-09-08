@@ -3,9 +3,6 @@ import logo from "../assets/socialLogo.png";
 import logo2 from "../assets/logo2.png";
 import { Link } from "react-router-dom";
 
-
-
-
 function SignIn() {
 
 

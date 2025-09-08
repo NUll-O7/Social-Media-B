@@ -2,12 +2,48 @@ import React , {useState} from "react";
 import logo1 from "../assets/socialLogo.png"
 import logo2 from '../assets/logo2.png'
 import { Link } from "react-router-dom";
+import { signUp } from "../apiCalls/authCalls.js";
 
 
 
 
 
 function SignUp() {
+
+    const [name , setName] = useState("");
+    const [userName , setUserName] = useState("");
+    const [email , setEmail] = useState("");
+    const [password , setPassword] = useState("");
+
+    // Handle SignUp 
+    const handleSignUp = async() => {
+      if(!name || !userName || !email || !password){
+        alert("Please fill all the fields");
+        return;
+      }
+
+      const user = {
+        name,
+        userName,
+        email,
+        password
+      }
+
+      try{
+        const response = await signUp(user);
+        console.log("Sign Up Successful" , response);
+        alert("Sign Up Successful! Please Sign In.");
+        // Clear the form
+        setName("");
+        setUserName("");
+        setEmail("");
+        setPassword("");
+      }catch(error){
+        console.error("Error during sign up" , error);
+        alert("Sign Up Failed. Please try again.");
+      }
+    }
+    
 
 
 
@@ -35,6 +71,8 @@ function SignUp() {
                 id="name"
                 className="w-full h-full rounded-md px-4 outline-none border-0 text-sm text-gray-900 placeholder-gray-400 bg-transparent"
                 required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
 
               />
             </div>
@@ -53,6 +91,8 @@ function SignUp() {
                 id="userName"
                 className="w-full h-full rounded-md px-4 outline-none border-0 text-sm text-gray-900 placeholder-gray-400 bg-transparent"
                 required
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
         
               />
             </div>
@@ -71,6 +111,8 @@ function SignUp() {
                 id="email"
                 className="w-full h-full rounded-md px-4 outline-none border-0 text-sm text-gray-900 placeholder-gray-400 bg-transparent"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
 
               />
             </div>
@@ -89,13 +131,16 @@ function SignUp() {
                 id="password"
                 className="w-full h-full rounded-md px-4 outline-none border-0 text-sm text-gray-900 placeholder-gray-400 bg-transparent"
                 required
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
 
               />
             </div>
 
             <button
               className="w-[70%] h-[44px] bg-[#0095f6] text-white font-semibold rounded-lg mt-4 hover:opacity-90 active:scale-[.99] transition shadow-sm"
-
+              onClick={handleSignUp}
             >
                 Sign Up
             </button>

@@ -1,0 +1,17 @@
+import axios from "axios";
+import { API_BASE_URL } from "./config";
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true, // always send cookies/credentials
+});
+
+// Sign Up
+export const signUp = async (userData) => {
+  try {
+    const response = await api.post("/api/auth/signup", userData);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+}

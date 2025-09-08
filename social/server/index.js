@@ -4,6 +4,7 @@ import connectDB from './config/db.js';
 import authRouter from './routes/auth.routes.js';
 import userRouter from './routes/user.routes.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 
 dotenv.config();
@@ -18,6 +19,10 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(cookieParser())
+app.use(cors({
+  origin: 'http://localhost:5174', // Allow requests from this origin
+  credentials: true, // Allow cookies to be sent
+}))
 
 
 // Routes
