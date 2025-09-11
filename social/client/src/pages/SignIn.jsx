@@ -4,12 +4,16 @@ import logo2 from "../assets/logo2.png";
 import { Link } from "react-router-dom";
 import { signIn } from "../apiCalls/authCalls.js";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice.js";
+
 
 function SignIn() {
    const [userName , setUserName] = useState("");
    const [password , setPassword] = useState("");
-   const [user , setUser] = useState(null)
+
    const navigate = useNavigate();
+   const dispatch = useDispatch()
 
    const handleSignIn = async() => {
     if(!userName || !password){
@@ -26,7 +30,13 @@ function SignIn() {
       const response =  await signIn(user);
        
       console.log("Sign In Successful" , response);
-      setUser(response)
+
+      dispatch(setUserData(response))
+
+      
+
+
+      
         navigate("/home");
       // Clear the form
       setUserName("");
