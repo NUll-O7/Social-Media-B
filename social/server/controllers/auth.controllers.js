@@ -91,7 +91,7 @@ export const signIn = async (req, res) => {
      })
 
 
-    res.status(200).json({ message: "User Logged in" });
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }

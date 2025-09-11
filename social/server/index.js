@@ -20,7 +20,7 @@ connectDB();
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
-  origin: 'http://localhost:5174', // Allow requests from this origin
+  origin: 'http://localhost:5173', // Allow requests from this origin
   credentials: true, // Allow cookies to be sent
 }))
 

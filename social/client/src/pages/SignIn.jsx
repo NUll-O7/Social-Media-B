@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 function SignIn() {
    const [userName , setUserName] = useState("");
    const [password , setPassword] = useState("");
+   const [user , setUser] = useState(null)
    const navigate = useNavigate();
 
    const handleSignIn = async() => {
@@ -25,6 +26,7 @@ function SignIn() {
       const response =  await signIn(user);
        
       console.log("Sign In Successful" , response);
+      setUser(response)
         navigate("/home");
       // Clear the form
       setUserName("");
