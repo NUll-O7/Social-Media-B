@@ -1,8 +1,13 @@
 import React from "react";
 import logo1 from "../assets/socialLogo.png";
 import logo2 from "../assets/logo2.png";
+import { useSelector } from "react-redux";
+import useCurrentUser from '../hooks/useCurrentUser.jsx'
 
 function Navbar() {
+  useCurrentUser()
+  const {userData} =  useSelector(state=>state.user)
+   
   return (
     <div className="w-full h-[70px] bg-white border-b border-gray-200 shadow-sm flex items-center justify-between px-6">
       {/* Logo */}
@@ -33,6 +38,9 @@ function Navbar() {
         </button>
 
         <div className="w-10 h-10 rounded-full bg-gray-300"></div>
+         <button className="text-sm font-medium text-gray-700 hover:text-gray-900">
+        {userData.user.name}
+        </button>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import logo2 from "../assets/logo2.png";
 import Navbar from "../components/NavBar";
 
 function HomePage() {
+  
   return (
     <div className="w-full min-h-screen bg-black flex flex-col">
       {/* Navbar */}
