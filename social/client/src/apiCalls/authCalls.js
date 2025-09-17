@@ -24,15 +24,14 @@ export const signIn = async (userData) => {
     throw error.response.data;
   }
 }
-
-export const getCurrentUser = async () => {
+export const getCurrentUser = async ()=>{
   try {
-    const response = await api.get("/api/user/current");
-    return response.data;
+    const response = await api.get('/api/user/current', {withCredentials:true})
+    return response.data
   } catch (error) {
-    throw error.response.data;
+     throw error.response?.data?.message || "Failed to fetch user data";
   }
-}
+};  
 
 
 
