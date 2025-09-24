@@ -11,8 +11,8 @@ function useCurrentUser() {
     const fetchuser = async () => {
       try {
         const result = await getCurrentUser();
-        console.log(result)
-        dispatch(setUserData(result));
+        console.log(result.user)
+        dispatch(setUserData(result.user));
       } catch (error) {
         console.error(error);
       }

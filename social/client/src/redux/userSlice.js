@@ -4,7 +4,8 @@ import {createSlice} from "@reduxjs/toolkit";
 const userSlice = createSlice({ 
     name: "user",
     initialState:{
-        userData : null
+        userData : null,
+        profileData:null,
     },
 
     reducers:{
@@ -14,9 +15,13 @@ const userSlice = createSlice({
         // clearUser:(state , action)=>{
         //     state.userData= null
         // }
+
+          setProfileData:(state , action)=>{
+            state.profileData = action.payload
+        },
     }
  })  
 
- export const {setUserData} = userSlice.actions
+ export const {setUserData , setProfileData} = userSlice.actions
  export default userSlice.reducer 
 
