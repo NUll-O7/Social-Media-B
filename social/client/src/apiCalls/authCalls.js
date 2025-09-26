@@ -14,7 +14,7 @@ export const signUp = async (userData) => {
   } catch (error) {
     throw error.response.data;
   }
-}
+};
 
 export const signIn = async (userData) => {
   try {
@@ -23,24 +23,34 @@ export const signIn = async (userData) => {
   } catch (error) {
     throw error.response.data;
   }
-}
-export const getCurrentUser = async ()=>{
+};
+export const getCurrentUser = async () => {
   try {
-    const response = await api.get('/api/user/current', {withCredentials:true})
-    return response.data
+    const response = await api.get("/api/user/current", {
+      withCredentials: true,
+    });
+    return response.data;
   } catch (error) {
-     throw error.response?.data?.message || "Failed to fetch user data";
+    throw error.response?.data?.message || "Failed to fetch user data";
   }
-}; 
+};
 
-export const getProfile = async (userName)=>{
-   try {
-    const response = await api.get(`/api/user/getprofile/${userName}`)
-    return response.data
+export const getProfile = async (userName) => {
+  try {
+    const response = await api.get(`/api/user/getprofile/${userName}`);
+    return response.data;
   } catch (error) {
-     throw error.response?.data?.message || "Failed to fetch user data";
+    throw error.response?.data?.message || "Failed to fetch user data";
   }
-}
+};
 
-
-
+export const editProfile = async (formData) => {
+  try {
+    const response = await api.post(`/api/user/editprofile/`, formData, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch user data";
+  }
+};

@@ -9,6 +9,7 @@ import useCurrentUser from "./hooks/useCurrentUser.jsx";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import Profile from "./pages/Profile.jsx";
+import EditProfile from "./pages/EditProfile.jsx";
 
 
 
@@ -24,6 +25,7 @@ function App() {
         <Route path='/forgot-password' element={!userData?<ForgotPassword/>:<Navigate to='/home'/>}/>
         <Route path='/home' element={userData?<Home/>:<Navigate to='/signin'/>}/>
         <Route path='/profile/:userName' element={<Profile/>}/>
+        <Route path='/editprofile' element={<EditProfile/>}/>
     </Routes>
   );
 }

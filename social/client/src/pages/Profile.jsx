@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getProfile } from "../apiCalls/authCalls";
 import { useDispatch, useSelector } from "react-redux";
 import { setProfileData } from "../redux/userSlice";
@@ -7,10 +7,12 @@ import logo from "../assets/socialLogo.png";
 import Nav from "../components/Nav";
 
 
+
 function Profile() {
   const { userName } = useParams();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
    const {profileData , userData} = useSelector(state =>state.user)
    console.log(profileData)
