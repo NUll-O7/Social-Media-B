@@ -32,11 +32,11 @@ function LeftHome() {
       <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200">
         <div className="flex items-center gap-3">
           <div className="w-[60px] h-[60px] rounded-full overflow-hidden border border-neutral-300">
-            <img  alt="profile" className="w-full h-full object-cover" />
+            <img src={userData?.profileImage}  alt="profile" className="w-full h-full object-cover" />
           </div>
           <div>
             <div className="font-semibold text-sm text-neutral-900">{userData.userName}</div>
-            <div className="text-xs text-neutral-500">Full Name</div>
+            <div className="text-xs text-neutral-500">{userData?.name}</div>
           </div>
         </div>
         <div className="text-[#0095F6] text-sm font-semibold cursor-pointer hover:underline">

@@ -5,6 +5,7 @@ import authRouter from './routes/auth.routes.js';
 import userRouter from './routes/user.routes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import postRouter from './routes/post.routes.js';
 
 
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(cors({
 // Routes
 app.use('/api/auth' , authRouter)
 app.use('/api/user' , userRouter)
+app.use('/api/post' , postRouter)
 
 
 

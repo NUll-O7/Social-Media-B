@@ -1,4 +1,4 @@
-import uploadToCloud from "../config/cloudinary.js";
+import uploadOnCloud from "../config/cloudinary.js";
 import User from "../models/user.model.js";
 
 export const getCurrentUser = async (req, res) => {
@@ -47,9 +47,9 @@ export const editProfile = async (req, res) => {
 
     // Image
 
-    let profileImage;
+    let profileImage='';
     if (req.file) {
-      profileImage = await uploadToCloud(req.file);
+      profileImage = await uploadOnCloud(req.file.path);
       console.log(profileImage)
     }
 

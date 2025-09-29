@@ -5,18 +5,18 @@ const postSchema = new mongoose.Schema(
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
-      required,
+      required:true,
     },
 
     mediaType: {
       type: String,
       enum: ["image", "video"],
-      required,
+      required:true,
     },
 
     mediaUrl: {
       type: String,
-      required,
+      required:true,
     },
 
     caption: {
@@ -36,12 +36,12 @@ const postSchema = new mongoose.Schema(
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "user",
-          required,
+          required :true,
         },
 
         text: {
           type: String,
-          required,
+          required :true,
         },
         createdAt: {
           type: Date,

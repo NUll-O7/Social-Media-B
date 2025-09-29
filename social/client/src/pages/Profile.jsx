@@ -59,7 +59,7 @@ function Profile() {
               {/* Left: Avatar + Info */}
               <div className="flex items-center gap-6">
                 <img
-                 
+                  src={profileData?.profileImage}
                   alt="Profile"
                   className="w-28 h-28 rounded-full object-cover border-4 border-neutral-200 shadow-md"
                 />
