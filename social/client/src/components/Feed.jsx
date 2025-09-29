@@ -2,8 +2,11 @@
 import React from "react";
 import logo from "../assets/socialLogo.png";
 import Nav from './Nav'
+import { useSelector } from "react-redux";
+import Post from "./Post";
 
 function FeedDesign() {
+ const {postData} = useSelector(state=>state.post)
   return (
     <div
       className="
@@ -49,36 +52,9 @@ function FeedDesign() {
 
         {/* Feed Posts */}
         <div className="flex-1 w-full px-6 py-6 overflow-y-auto bg-neutral-50">
-          {Array(4)
-            .fill("")
-            .map((_, i) => (
-              <div
-                key={i}
-                className="w-full bg-white border border-neutral-200 rounded-xl p-4 mb-6 shadow-sm"
-              >
-                {/* Post header */}
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-[40px] h-[40px] rounded-full bg-neutral-300"></div>
-                  <div>
-                    <p className="font-semibold text-sm">User {i + 1}</p>
-                    <p className="text-xs text-neutral-500">2h ago</p>
-                  </div>
-                </div>
-
-                {/* Post image */}
-                <div className="w-full h-[220px] bg-neutral-200 rounded-lg mb-3"></div>
-
-                {/* Post actions + caption */}
-                <div className="flex gap-4 mb-2">
-                  <div className="w-[22px] h-[22px] bg-neutral-300 rounded-full"></div>
-                  <div className="w-[22px] h-[22px] bg-neutral-300 rounded-full"></div>
-                  <div className="w-[22px] h-[22px] bg-neutral-300 rounded-full"></div>
-                </div>
-                <p className="text-sm text-neutral-700">
-                  This is a sample caption for post {i + 1}.
-                </p>
-              </div>
-            ))}
+           {postData?.map((post)=>(
+            <Post post={post}/>
+           ))}
         </div>
       </div>
     </div>

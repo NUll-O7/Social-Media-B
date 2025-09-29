@@ -3,17 +3,15 @@ import React, { useState, useRef } from "react";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { FiPlusSquare } from "react-icons/fi";
 
+
 import axios from "axios";
 import logo2 from "../assets/logo2.png";
-
-
-
-
+import { createPost } from "../apiCalls/authCalls";
+import { useDispatch, useSelector } from "react-redux";
+import { setPostData } from "../redux/postSlice";
 
 function Upload() {
-
-
-
+  const {postData} =  useSelector(state=>state.post)
   const [uploadType, setUploadType] = useState("post");
   const [frontendMedia, setFrontendMedia] = useState(null);
   const [mediaType, setMediaType] = useState("");
@@ -21,34 +19,44 @@ function Upload() {
   const [backendMedia, setBackendMedia] = useState(null);
   const [loading] = useState(false);
 
-
   const mediaInput = useRef();
-  // const dispatch = useDispatch()
-
+  const dispatch = useDispatch()
 
   const handleMedia = (e) => {
-    console.log('Function started')
-    const file = e.target.files[0]
-    if(file?.type.includes('image')){
-      setMediaType('image')
-    }else if(file?.type.includes('video')){
-      setMediaType('video')
-    }else{
-        setMediaType(null)
+    console.log("Function started");
+    const file = e.target.files[0];
+    if (file?.type.includes("image")) {
+      setMediaType("image");
+    } else if (file?.type.includes("video")) {
+      setMediaType("video");
+    } else {
+      setMediaType(null);
     }
 
-    console.log(file)
-    const mediaUrl = URL.createObjectURL(file)
-    console.log(mediaUrl)
-    setFrontendMedia(mediaUrl)
+    console.log(file);
+    const mediaUrl = URL.createObjectURL(file);
+    console.log(mediaUrl);
+    setFrontendMedia(mediaUrl);
+    setBackendMedia(file);
   };
 
   const uploadPost = async () => {
-    
+    try {
+      const formData = new FormData();
+      formData.append("mediaType", mediaType);
+      formData.append("mediaUrl", backendMedia);
+      formData.append("caption", caption);
+
+      const result = await createPost(formData);
+      dispatch(setPostData([...postData, result]))
+      
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleUpload = () => {
-  
+    uploadPost();
   };
 
   return (

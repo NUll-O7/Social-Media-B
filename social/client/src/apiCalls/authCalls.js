@@ -54,3 +54,15 @@ export const editProfile = async (formData) => {
     throw error.response?.data?.message || "Failed to fetch user data";
   }
 };
+
+
+export const createPost = async (formData)=>{
+    try {
+    const response = await api.post(`/api/post/upload/`, formData, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch user data";
+  } 
+}
