@@ -1,13 +1,55 @@
 // src/pages/Upload.js
-import React from "react";
+import React, { useState, useRef } from "react";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { FiPlusSquare } from "react-icons/fi";
+
+import axios from "axios";
 import logo2 from "../assets/logo2.png";
-import { useRef } from "react";
+
+
+
+
 
 function Upload() {
 
-  const ref = useRef()
+
+
+  const [uploadType, setUploadType] = useState("post");
+  const [frontendMedia, setFrontendMedia] = useState(null);
+  const [mediaType, setMediaType] = useState("");
+  const [caption, setCaption] = useState("");
+  const [backendMedia, setBackendMedia] = useState(null);
+  const [loading] = useState(false);
+
+
+  const mediaInput = useRef();
+  // const dispatch = useDispatch()
+
+
+  const handleMedia = (e) => {
+    console.log('Function started')
+    const file = e.target.files[0]
+    if(file?.type.includes('image')){
+      setMediaType('image')
+    }else if(file?.type.includes('video')){
+      setMediaType('video')
+    }else{
+        setMediaType(null)
+    }
+
+    console.log(file)
+    const mediaUrl = URL.createObjectURL(file)
+    console.log(mediaUrl)
+    setFrontendMedia(mediaUrl)
+  };
+
+  const uploadPost = async () => {
+    
+  };
+
+  const handleUpload = () => {
+  
+  };
 
   return (
     <div
@@ -38,54 +80,107 @@ function Upload() {
             </h2>
           </div>
 
-          {/* Upload type switch (static) */}
+          {/* Upload type switch */}
           <div className="w-[95%] h-[50px] bg-neutral-100 rounded-full flex justify-around items-center mt-2">
-            <div className="w-[28%] h-[80%] flex justify-center items-center text-sm font-medium rounded-full bg-[#0095F6] text-white shadow-md">
-              Post
-            </div>
-            <div className="w-[28%] h-[80%] flex justify-center items-center text-sm font-medium rounded-full text-neutral-600 hover:bg-neutral-200 cursor-pointer">
-              Story
-            </div>
-            <div className="w-[28%] h-[80%] flex justify-center items-center text-sm font-medium rounded-full text-neutral-600 hover:bg-neutral-200 cursor-pointer">
-              Reel
-            </div>
+            {["post", "story", "reel"].map((type) => (
+              <div
+                key={type}
+                onClick={() => setUploadType(type)}
+                className={`
+                  w-[28%] h-[80%] flex justify-center items-center text-sm font-medium rounded-full cursor-pointer 
+                  transition-all duration-200
+                  ${
+                    uploadType === type
+                      ? "bg-[#0095F6] text-white shadow-md"
+                      : "text-neutral-600 hover:bg-neutral-200"
+                  }
+                `}
+              >
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </div>
+            ))}
           </div>
 
-          {/* Upload box (static placeholder) */}
-          <div
-            className="
-              w-[95%] h-[220px] bg-neutral-50 border border-dashed border-neutral-300 
-              flex flex-col items-center justify-center gap-3 
-              mt-6 rounded-xl cursor-pointer 
-              hover:bg-neutral-100 transition
-            "
-          >
-            <FiPlusSquare className="text-neutral-500 w-8 h-8" />
-            <p className="text-neutral-600 font-medium">Upload Post</p>
-          </div>
+          {/* Upload box */}
+          {uploadType !== "post" ? (
+            <div
+              className="
+                w-[95%] h-[220px] bg-neutral-50 border border-dashed border-neutral-300 
+                flex flex-col items-center justify-center gap-3 
+                mt-6 rounded-xl
+              "
+            >
+              <FiPlusSquare className="text-neutral-400 w-8 h-8" />
+              <p className="text-neutral-400 font-medium">
+                {uploadType.charAt(0).toUpperCase() + uploadType.slice(1)}{" "}
+                upload coming soon
+              </p>
+            </div>
+          ) : !frontendMedia ? (
+            <div
+              className="
+                w-[95%] h-[220px] bg-neutral-50 border border-dashed border-neutral-300 
+                flex flex-col items-center justify-center gap-3 
+                mt-6 rounded-xl cursor-pointer 
+                hover:bg-neutral-100 transition
+              "
+              onClick={() => mediaInput.current.click()}
+            >
+              <input
+                type="file"
+                accept="image/*,video/*"
+                hidden
+                ref={mediaInput}
+                onChange={handleMedia}
+              />
+              <FiPlusSquare className="text-neutral-500 w-8 h-8" />
+              <p className="text-neutral-600 font-medium">Upload Post</p>
+            </div>
+          ) : (
+            <div className="w-[95%] mt-6 flex flex-col items-center">
+              {mediaType === "image" && (
+                <img
+                  src={frontendMedia}
+                  alt=""
+                  className="w-full max-h-[220px] object-cover rounded-xl"
+                />
+              )}
+              {mediaType === "video" && (
+                <video
+                  src={frontendMedia}
+                  controls
+                  className="w-full max-h-[220px] rounded-xl"
+                />
+              )}
 
-          {/* Caption input (static) */}
-          <input
-            type="text"
-            placeholder="Write a caption..."
-            className="
-              w-[95%] mt-4 px-3 py-2 rounded-md border border-neutral-300 
-              bg-neutral-50 text-neutral-800 text-sm 
-              focus:outline-none focus:border-neutral-400
-            "
-          />
+              <input
+                type="text"
+                placeholder="Write a caption..."
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                className="
+                  w-full mt-4 px-3 py-2 rounded-md border border-neutral-300 
+                  bg-neutral-50 text-neutral-800 text-sm 
+                  focus:outline-none focus:border-neutral-400
+                "
+              />
+            </div>
+          )}
 
-          {/* Button (static) */}
-          <button
-            className="
-              w-[95%] h-[44px] mt-6 rounded-lg font-semibold 
-              bg-[#0095F6] text-white 
-              hover:bg-[#0086dd] active:scale-[0.99] transition
-              shadow-[0_6px_16px_rgba(0,149,246,0.35)]
-            "
-          >
-            Upload Post
-          </button>
+          {/* Button */}
+          {uploadType === "post" && frontendMedia && (
+            <button
+              onClick={handleUpload}
+              className="
+                w-[95%] h-[44px] mt-6 rounded-lg font-semibold 
+                bg-[#0095F6] text-white 
+                hover:bg-[#0086dd] active:scale-[0.99] transition
+                shadow-[0_6px_16px_rgba(0,149,246,0.35)]
+              "
+            >
+              {loading ? <ClipLoader size={24} color="white" /> : "Upload Post"}
+            </button>
+          )}
         </div>
 
         {/* RIGHT (branding / promo) */}
