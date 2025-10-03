@@ -134,4 +134,77 @@ export const getSuggestions = async () => {
 }
 
 
+// Story Calls
+
+export const createStory = async (formData) => {
+  try {
+    const response = await api.post("/api/story/create", formData, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to create story";
+  }
+};
+
+// Get all active stories
+export const getAllStories = async () => {
+  try {
+    const response = await api.get("/api/story/all", {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch stories";
+  }
+};
+
+// Get current user's stories
+export const getMyStories = async () => {
+  try {
+    const response = await api.get("/api/story/my-stories", {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch your stories";
+  }
+};
+
+// Get stories by specific user
+export const getUserStories = async (userId) => {
+  try {
+    const response = await api.get(`/api/story/user/${userId}`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch user stories";
+  }
+};
+
+// View a story
+export const viewStory = async (storyId) => {
+  try {
+    const response = await api.post(`/api/story/view/${storyId}`, {}, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to view story";
+  }
+};
+
+// Delete a story
+export const deleteStory = async (storyId) => {
+  try {
+    const response = await api.delete(`/api/story/${storyId}`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to delete story";
+  }
+};
+
 

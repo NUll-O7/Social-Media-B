@@ -13,6 +13,8 @@ import EditProfile from "./pages/EditProfile.jsx";
 import Upload from "./pages/Upload.jsx";
 import useAllPosts from "./hooks/useAllPosts.jsx";
 import getSuggestedUsers from "./hooks/getSuggestedUsers.jsx";
+import CreateStory from "./components/createStory.jsx";
+
 
 
 
@@ -31,7 +33,8 @@ function App() {
         <Route path='/home' element={userData?<Home/>:<Navigate to='/signin'/>}/>
         <Route path='/profile/:userName' element={<Profile/>}/>
         <Route path='/editprofile' element={<EditProfile/>}/>
-         <Route path='/upload' element={<Upload/>}/>
+        <Route path='/upload' element={<Upload/>}/>
+        <Route path='/create-story' element={<CreateStory/>}/>
     </Routes>
   );
 }
