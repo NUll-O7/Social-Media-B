@@ -11,11 +11,13 @@ import { Navigate } from "react-router-dom";
 import Profile from "./pages/Profile.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import Upload from "./pages/Upload.jsx";
+import useAllPosts from "./hooks/useAllPosts.jsx";
 
 
 
 function App() {
   useCurrentUser()
+  useAllPosts()
   const {userData} = useSelector(state=>state.user)
 
   return (

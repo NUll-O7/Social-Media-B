@@ -66,3 +66,30 @@ export const createPost = async (formData)=>{
     throw error.response?.data?.message || "Failed to fetch user data";
   } 
 }
+
+// Get all the Posts
+
+
+export const getAllPosts = async ()=>{
+    try {
+    const response = await api.get(`/api/post/getAllPosts`,  {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch Posts";
+  } 
+}
+
+// post Like
+
+export const likePost = async (postId) => {
+  try {
+    const response = await api.post(`/api/post/like/${postId}`, {}, { withCredentials: true })
+    return response.data
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to like post";
+  }
+}
+
+

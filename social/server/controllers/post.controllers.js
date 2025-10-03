@@ -44,7 +44,7 @@ export const uploadPost = async (req, res) => {
   }
 };
 
-export const getAllPosts = async () => {
+export const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find({}).populate(
       "author",
@@ -54,4 +54,37 @@ export const getAllPosts = async () => {
   } catch (error) {
     return res.status(404).json({ message: "No Posts Found" });
   }
+};
+
+export const like = async (req, res) => {
+  // get the user
+  // get the post id
+  // check for alreadyLiked or not
+  // if not add one like - update
+  // if liked then remove - update
+  const postId = req.params.postId;
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    return res.status(404).json({ message: "Could not find Post" });
+  }
+
+  const alreadyLiked = post.likes.some(
+    (id) => id.toString() == req.userId.toString()
+  );
+
+  if (alreadyLiked) {
+    // Unlike
+    post.likes = post.likes.filter(
+      (id) => id.toString() !== req.userId.toString()
+    );
+  } else {
+    // like
+    post.likes.push(req.userId);
+  }
+
+  await post.save();
+  await post.populate("author", "userName profileImage");
+
+  return res.status(200).json(post);
 };
