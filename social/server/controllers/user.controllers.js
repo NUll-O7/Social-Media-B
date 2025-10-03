@@ -39,7 +39,7 @@ export const editProfile = async (req, res) => {
     const user = await User.findById(req.userId);
 
     if (!user) {
-     return  res.status(404).json({ message: "User Not Found" });
+      return res.status(404).json({ message: "User Not Found" });
     }
     // check for duplicate UserName
 
@@ -47,10 +47,10 @@ export const editProfile = async (req, res) => {
 
     // Image
 
-    let profileImage='';
+    let profileImage = "";
     if (req.file) {
       profileImage = await uploadOnCloud(req.file.path);
-      console.log(profileImage)
+      console.log(profileImage);
     }
 
     user.name = name;
@@ -63,8 +63,21 @@ export const editProfile = async (req, res) => {
 
     await user.save();
 
-    return res.status(201).json(user)
+    return res.status(201).json(user);
   } catch (error) {
-    console.log(`Edit Profile Error ${error}`)
+    console.log(`Edit Profile Error ${error}`);
+  }
+};
+
+export const getSuggestedUsers = async (req, res) => {
+  try {
+    const users = await User.find({
+      _id: { $ne: req.userId },
+    }).select("-password");
+    return res.status(200).json(users);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `get suggested user error ${error}` });
   }
 };
