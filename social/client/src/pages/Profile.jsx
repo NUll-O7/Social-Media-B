@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { getProfile, followUser, unfollowUser, getFollowStatus } from "../apiCalls/authCalls";
+import {
+  getProfile,
+  followUser,
+  unfollowUser,
+  getFollowStatus,
+} from "../apiCalls/authCalls";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setProfileData } from "../redux/userSlice";
 import logo from "../assets/socialLogo.png";
 import Nav from "../components/Nav";
-
 
 function Profile() {
   const { userName } = useParams();
@@ -43,12 +47,11 @@ function Profile() {
       if (isFollowing) {
         await unfollowUser(profileData._id);
         setIsFollowing(false);
-        setFollowersCount(prev => prev - 1);
+        setFollowersCount((prev) => prev - 1);
       } else {
         await followUser(profileData._id);
         setIsFollowing(true);
-        setFollowersCount(prev => prev +1)
-         
+        setFollowersCount((prev) => prev + 1);
       }
     } catch (error) {
       console.error("Follow toggle error:", error);
@@ -66,9 +69,7 @@ function Profile() {
 
   if (!profileData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-100">
-     
-      </div>
+      <div className="min-h-screen flex items-center justify-center bg-neutral-100"></div>
     );
   }
 
@@ -81,7 +82,6 @@ function Profile() {
       "
     >
       <div className="w-[95%] lg:max-w-[85%] min-h-[90vh] rounded-2xl flex flex-col overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.25)] bg-white">
-        
         {/* Header */}
         <div className="w-full h-[80px] flex items-center justify-between px-6 border-b border-neutral-200">
           <img src={logo} alt="Logo" className="w-[100px]" />
@@ -124,34 +124,52 @@ function Profile() {
               </div>
 
               {/* Right: Action Button */}
-              <div className="mt-4 sm:mt-0">
+              {/* Right: Action Buttons */}
+              <div className="mt-4 sm:mt-0 flex gap-2">
                 {isOwnProfile ? (
-                  <button 
+                  <button
                     onClick={() => navigate(`/editprofile/`)}
                     className="px-5 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold shadow-md hover:opacity-90 transition"
                   >
                     Edit Profile
                   </button>
                 ) : (
-                  <button 
-                    onClick={handleFollowToggle}
-                    disabled={followLoading}
-                    className={`
-                      px-5 py-2 rounded-lg font-semibold shadow-md transition
-                      ${isFollowing 
-                        ? 'bg-neutral-200 text-neutral-800 hover:bg-neutral-300' 
-                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                  <>
+                    <button
+                      onClick={handleFollowToggle}
+                      disabled={followLoading}
+                      className={`
+          px-5 py-2 rounded-lg font-semibold shadow-md transition
+          ${
+            isFollowing
+              ? "bg-neutral-200 text-neutral-800 hover:bg-neutral-300"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }
+          disabled:opacity-50 disabled:cursor-not-allowed
+          min-w-[100px]
+        `}
+                    >
+                      {followLoading ? (
+                        <h1>Following</h1>
+                      ) : isFollowing ? (
+                        "Unfollow"
+                      ) : (
+                        "Follow"
+                      )}
+                    </button>
+
+                    {/* Message Button */}
+                    <button
+                      onClick={() =>
+                        navigate("/messages", {
+                          state: { selectedUser: profileData },
+                        })
                       }
-                      disabled:opacity-50 disabled:cursor-not-allowed
-                      min-w-[100px]
-                    `}
-                  >
-                    {followLoading ? (
-                       <h1>Follwing</h1>
-                    ) : (
-                      isFollowing ? "Unfollow" : "Follow"
-                    )}
-                  </button>
+                      className="px-5 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-600 text-white font-semibold shadow-md hover:opacity-90 transition"
+                    >
+                      Message
+                    </button>
+                  </>
                 )}
               </div>
             </div>
@@ -165,9 +183,7 @@ function Profile() {
                 <div className="text-neutral-500 text-sm">Posts</div>
               </div>
               <div>
-                <div className="font-bold text-lg">
-                  {followersCount}
-                </div>
+                <div className="font-bold text-lg">{followersCount}</div>
                 <div className="text-neutral-500 text-sm">Followers</div>
               </div>
               <div>

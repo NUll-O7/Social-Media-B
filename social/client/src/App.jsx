@@ -8,12 +8,14 @@ import ForgotPassword from "./pages/ForgotPassword";
 import useCurrentUser from "./hooks/useCurrentUser.jsx";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import Profile from "./pages/Profile.jsx";
+import Profile from './pages/Profile.jsx'
 import EditProfile from "./pages/EditProfile.jsx";
 import Upload from "./pages/Upload.jsx";
 import useAllPosts from "./hooks/useAllPosts.jsx";
 import getSuggestedUsers from "./hooks/getSuggestedUsers.jsx";
 import CreateStory from "./components/createStory.jsx";
+import MessagesPage from "./pages/MessagesPage.jsx";
+
 
 
 
@@ -35,6 +37,7 @@ function App() {
         <Route path='/editprofile' element={<EditProfile/>}/>
         <Route path='/upload' element={<Upload/>}/>
         <Route path='/create-story' element={<CreateStory/>}/>
+        <Route path='/messages' element={userData?<MessagesPage/>:<Navigate to='/signin'/>}/>
     </Routes>
   );
 }

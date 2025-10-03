@@ -207,4 +207,39 @@ export const deleteStory = async (storyId) => {
   }
 };
 
+// Message Calls
+
+export const getConversation = async (userId) => {
+  try {
+    const response = await api.get(`/api/message/conversation/${userId}`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch conversation";
+  }
+};
+
+export const getAllConversations = async () => {
+  try {
+    const response = await api.get(`/api/message/conversations`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to fetch conversations";
+  }
+};
+
+export const markMessagesAsRead = async (userId) => {
+  try {
+    const response = await api.post(`/api/message/read/${userId}`, {}, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || "Failed to mark as read";
+  }
+};
+
 
