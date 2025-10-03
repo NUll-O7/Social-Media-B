@@ -1,6 +1,6 @@
 // src/components/RightHomeDesign.jsx
 import React from "react";
-import Messages from "../pages/Messages";
+import Messages from "../pages/messages.jsx";
 
 function RightHome() {
   return (

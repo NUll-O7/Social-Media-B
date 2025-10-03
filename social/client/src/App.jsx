@@ -13,7 +13,7 @@ import EditProfile from "./pages/EditProfile.jsx";
 import Upload from "./pages/Upload.jsx";
 import useAllPosts from "./hooks/useAllPosts.jsx";
 import getSuggestedUsers from "./hooks/getSuggestedUsers.jsx";
-import CreateStory from "./components/createStory.jsx";
+import CreateStory from "./components/CreateStory.jsx";
 import MessagesPage from "./pages/MessagesPage.jsx";
 
 

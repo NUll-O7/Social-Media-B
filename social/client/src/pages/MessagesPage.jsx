@@ -1,5 +1,5 @@
 import React from 'react';
-import Messages from './Messages';
+import Messages from './messages.jsx';
 import logo from "../assets/socialLogo.png";
 import Nav from "../components/Nav";
 
