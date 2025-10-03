@@ -88,3 +88,13 @@ export const like = async (req, res) => {
 
   return res.status(200).json(post);
 };
+
+// controller for comments
+ export const comments= async(req , res)=>{
+    // post id
+    // user id
+    // text 
+    // createad At
+
+
+ }

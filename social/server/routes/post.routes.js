@@ -8,4 +8,5 @@ postRouter.post("/upload", isAuth, upload.single("mediaUrl"), uploadPost);
 postRouter.get("/getAllPosts" , isAuth ,getAllPosts );
 postRouter.post("/like/:postId", isAuth, like)
 
+
 export default postRouter;

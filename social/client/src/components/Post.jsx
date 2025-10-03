@@ -38,7 +38,7 @@ function Post({ post }) {
 
   // Handle Comment
   const handleComment = async (e) => {
-   
+   // Finish this function
   };
 
   return (
@@ -53,7 +53,7 @@ function Post({ post }) {
           />
         </div>
         <div>
-          <p className="font-semibold text-sm">{post.author.name}</p>
+          <p className="font-semibold text-sm">{post.author.userName}</p>
           <p className="text-xs text-neutral-500">
             {new Date(post.createdAt).toLocaleDateString()}
           </p>
@@ -64,13 +64,13 @@ function Post({ post }) {
       <div className="w-full h-[500px] bg-neutral-200 rounded-lg mb-3 overflow-hidden">
         {post.mediaType === "image" ? (
           <img
-            src={post.media}
+            src={post.mediaUrl}
             alt="post"
             className="w-full h-full object-cover"
           />
         ) : (
           <video
-            src={post.media}
+            src={post.mediaUrl}
             controls
             className="w-full h-full object-cover"
           />

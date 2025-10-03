@@ -1,35 +1,76 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { getProfile, followUser, unfollowUser, getFollowStatus } from "../apiCalls/authCalls";
 import { useNavigate, useParams } from "react-router-dom";
-import { getProfile } from "../apiCalls/authCalls";
 import { useDispatch, useSelector } from "react-redux";
 import { setProfileData } from "../redux/userSlice";
 import logo from "../assets/socialLogo.png";
 import Nav from "../components/Nav";
 
 
-
 function Profile() {
   const { userName } = useParams();
-
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const { profileData, userData } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
-   const {profileData , userData} = useSelector(state =>state.user)
-   console.log(profileData)
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
+  const [followersCount, setFollowersCount] = useState(0);
 
-  async function handleProfile() {
+  const isOwnProfile = userData?.userName === userName;
+
+  const handleProfile = async (userName) => {
     try {
-      const userResult = await getProfile(userName);
+      const result = await getProfile(userName);
+      dispatch(setProfileData(result));
+      setFollowersCount(result.followers?.length || 0);
 
-      dispatch(setProfileData(userResult));
+      // Check follow status if not own profile
+      if (!isOwnProfile) {
+        const statusResult = await getFollowStatus(result._id);
+        setIsFollowing(statusResult.isFollowing);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching profile data:", error);
     }
-  }
+  };
+
+  const handleFollowToggle = async () => {
+    if (!profileData?._id || followLoading) return;
+
+    setFollowLoading(true);
+    try {
+      if (isFollowing) {
+        await unfollowUser(profileData._id);
+        setIsFollowing(false);
+        setFollowersCount(prev => prev - 1);
+      } else {
+        await followUser(profileData._id);
+        setIsFollowing(true);
+        setFollowersCount(prev => prev +1)
+         
+      }
+    } catch (error) {
+      console.error("Follow toggle error:", error);
+      alert(error);
+    } finally {
+      setFollowLoading(false);
+    }
+  };
 
   useEffect(() => {
-    handleProfile();
-  }, [userName , dispatch]);
+    if (userName) {
+      handleProfile(userName);
+    }
+  }, [userName, dispatch]);
+
+  if (!profileData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-neutral-100">
+     
+      </div>
+    );
+  }
 
   return (
     <div
@@ -40,6 +81,7 @@ function Profile() {
       "
     >
       <div className="w-[95%] lg:max-w-[85%] min-h-[90vh] rounded-2xl flex flex-col overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.25)] bg-white">
+        
         {/* Header */}
         <div className="w-full h-[80px] flex items-center justify-between px-6 border-b border-neutral-200">
           <img src={logo} alt="Logo" className="w-[100px]" />
@@ -59,52 +101,78 @@ function Profile() {
               {/* Left: Avatar + Info */}
               <div className="flex items-center gap-6">
                 <img
-                  src={profileData?.profileImage}
+                  src={profileData.profileImage || "/default-avatar.png"}
                   alt="Profile"
                   className="w-28 h-28 rounded-full object-cover border-4 border-neutral-200 shadow-md"
                 />
                 <div>
                   <h1 className="text-2xl font-bold text-neutral-900">
-                    {profileData?.name}
+                    {profileData.name || "No name"}
                   </h1>
                   <p className="text-sm text-neutral-600">
-                   {profileData?.userName}
+                    @{profileData.userName || "No username"}
                   </p>
                   <p className="mt-1 text-neutral-500 text-sm">
-                   {profileData?.bio}
+                    {profileData.bio || "No bio available"}
                   </p>
-                
+                  {profileData.profession && (
+                    <span className="mt-2 inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs">
+                      {profileData.profession}
+                    </span>
+                  )}
                 </div>
               </div>
 
-              {/* Right: Edit Profile button (only for logged-in user’s own profile) */}
-              {userData?.userName === profileData?.userName && (
-                <button
-                  onClick={() => navigate(`/editprofile/`)}
-                  className="mt-4 sm:mt-0 px-5 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold shadow-md hover:opacity-90 transition"
-                >
-                  Edit Profile
-                </button>
-              )}
+              {/* Right: Action Button */}
+              <div className="mt-4 sm:mt-0">
+                {isOwnProfile ? (
+                  <button 
+                    onClick={() => navigate(`/editprofile/`)}
+                    className="px-5 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold shadow-md hover:opacity-90 transition"
+                  >
+                    Edit Profile
+                  </button>
+                ) : (
+                  <button 
+                    onClick={handleFollowToggle}
+                    disabled={followLoading}
+                    className={`
+                      px-5 py-2 rounded-lg font-semibold shadow-md transition
+                      ${isFollowing 
+                        ? 'bg-neutral-200 text-neutral-800 hover:bg-neutral-300' 
+                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                      }
+                      disabled:opacity-50 disabled:cursor-not-allowed
+                      min-w-[100px]
+                    `}
+                  >
+                    {followLoading ? (
+                       <h1>Follwing</h1>
+                    ) : (
+                      isFollowing ? "Unfollow" : "Follow"
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 text-center border-t pt-4">
               <div>
                 <div className="font-bold text-lg">
-                  {profileData?.posts.length}
+                  {profileData.posts?.length || 0}
                 </div>
                 <div className="text-neutral-500 text-sm">Posts</div>
               </div>
               <div>
                 <div className="font-bold text-lg">
-                  {profileData?.followers.length}
+                  {followersCount}
                 </div>
                 <div className="text-neutral-500 text-sm">Followers</div>
               </div>
               <div>
                 <div className="font-bold text-lg">
-                  {profileData?.following.length}
+                  {profileData.following?.length || 0}
                 </div>
                 <div className="text-neutral-500 text-sm">Following</div>
               </div>
