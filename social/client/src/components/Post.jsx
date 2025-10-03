@@ -4,7 +4,7 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BiComment } from "react-icons/bi";
 import { BsBookmark } from "react-icons/bs";
 import { likePost} from "../apiCalls/authCalls";
-// import { updatePost } from "../redux/postSlice";
+import { updatePost } from "../redux/postSlice";
 
 function Post({ post }) {
   const { userData } = useSelector((state) => state.user);
@@ -28,7 +28,7 @@ function Post({ post }) {
     try {
       const updatedPost = await likePost(post._id);
       console.log(updatedPost)
-      // dispatch(updatePost(updatedPost));
+      dispatch(updatePost(updatedPost));
     } catch (error) {
       console.error("Like error:", error);
     } finally {
