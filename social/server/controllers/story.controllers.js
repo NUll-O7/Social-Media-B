@@ -1,45 +1,40 @@
-import Story from "../models/story.model.js";
 import User from "../models/user.model.js";
+import Story from "../models/story.model.js";
 import uploadOnCloud from "../config/cloudinary.js";
 
-// Create a new story
+
 export const createStory = async (req, res) => {
   try {
     const { mediaType } = req.body;
 
     if (!req.file) {
-      return res.status(400).json({ message: "No media file detected" });
+      return res.status(400).json({ message: "no file found" });
     }
 
-    // Upload to cloudinary
     const mediaUrl = await uploadOnCloud(req.file.path);
-
-    // Create story
     const story = await Story.create({
-      author: req.userId,
-      mediaType,
       mediaUrl,
+      mediaType,
+      author: req.userId,
     });
 
-    // Add story to user's stories array
+    // extra things
     const user = await User.findById(req.userId);
+
     user.story.push(story._id);
     await user.save();
 
-    // Populate author details
     const populatedStory = await Story.findById(story._id).populate(
       "author",
-      "userName profileImage name"
+      "profileImage userName"
     );
 
-    return res.status(201).json(populatedStory);
+    return res.status(200).json(populatedStory);
   } catch (error) {
-    console.error("Create story error:", error);
-    return res.status(500).json({ message: "Failed to create story" });
+    return res.status(500).json({ message: `Cannot upload Story ${error}` });
   }
 };
 
-// Get all active stories (not expired, grouped by user)
 export const getAllStories = async (req, res) => {
   try {
     const currentTime = new Date();
@@ -67,9 +62,11 @@ export const getAllStories = async (req, res) => {
       return acc;
     }, {});
 
+    
+
     // Convert to array
     const storiesArray = Object.values(groupedStories);
-
+    console.log(storiesArray)
     return res.status(200).json(storiesArray);
   } catch (error) {
     console.error("Get stories error:", error);
@@ -77,7 +74,28 @@ export const getAllStories = async (req, res) => {
   }
 };
 
-// Get stories by specific user
+// get user specific stories
+
+// Get current user's stories
+export const getMyStories = async (req, res) => {
+  try {
+    const currentTime = new Date();
+
+    const stories = await Story.find({
+      author: req.userId,
+      expiresAt: { $gt: currentTime },
+    })
+      .populate("author", "userName profileImage name")
+      .populate("viewers", "userName profileImage")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json(stories);
+  } catch (error) {
+    console.error("Get my stories error:", error);
+    return res.status(500).json({ message: "Failed to fetch your stories" });
+  }
+};
+
 export const getUserStories = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -98,7 +116,6 @@ export const getUserStories = async (req, res) => {
   }
 };
 
-// View a story (add current user to viewers)
 export const viewStory = async (req, res) => {
   try {
     const { storyId } = req.params;
@@ -137,54 +154,8 @@ export const viewStory = async (req, res) => {
   }
 };
 
-// Delete a story
-export const deleteStory = async (req, res) => {
-  try {
-    const { storyId } = req.params;
-    const currentUserId = req.userId;
+//Delete a Story
 
-    const story = await Story.findById(storyId);
+// Small Homework
 
-    if (!story) {
-      return res.status(404).json({ message: "Story not found" });
-    }
 
-    // Check if current user is the author
-    if (story.author.toString() !== currentUserId.toString()) {
-      return res.status(403).json({ message: "Unauthorized to delete this story" });
-    }
-
-    // Remove story from user's stories array
-    await User.findByIdAndUpdate(currentUserId, {
-      $pull: { story: storyId },
-    });
-
-    // Delete the story
-    await Story.findByIdAndDelete(storyId);
-
-    return res.status(200).json({ message: "Story deleted successfully" });
-  } catch (error) {
-    console.error("Delete story error:", error);
-    return res.status(500).json({ message: "Failed to delete story" });
-  }
-};
-
-// Get current user's stories
-export const getMyStories = async (req, res) => {
-  try {
-    const currentTime = new Date();
-
-    const stories = await Story.find({
-      author: req.userId,
-      expiresAt: { $gt: currentTime },
-    })
-      .populate("author", "userName profileImage name")
-      .populate("viewers", "userName profileImage")
-      .sort({ createdAt: -1 });
-
-    return res.status(200).json(stories);
-  } catch (error) {
-    console.error("Get my stories error:", error);
-    return res.status(500).json({ message: "Failed to fetch your stories" });
-  }
-};

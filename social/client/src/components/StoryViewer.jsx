@@ -4,7 +4,7 @@ import { updateStoryViewers, removeStory } from "../redux/storySlice";
 import { IoClose } from "react-icons/io5";
 import { FiTrash2 } from "react-icons/fi";
 import { AiFillEye } from "react-icons/ai";
-import { deleteStory, viewStory } from "../apiCalls/authCalls";
+import { viewStory } from "../apiCalls/authCalls";
 
 function StoryViewer({ storyGroup, onClose, currentUserId }) {
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -26,20 +26,18 @@ const storySchema = new mongoose.Schema(
       },
     ],
 
-    expiresAt: {
-      type: Date,
-      default: function() {
-        return new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+    expiresAt:{
+      type : Date,
+      default:function(){
+        return  new Date(Date.now() + 24*60*60*1000 )
       },
-      index: { expires: 0 } // TTL index - MongoDB will auto-delete expired documents
+
+      index:{expires:0} // TTL indexing
+
     }
   },
   { timestamps: true }
 );
-
-// Index for efficient querying
-storySchema.index({ author: 1, expiresAt: 1 });
-storySchema.index({ expiresAt: 1 });
 
 const Story = mongoose.model("story", storySchema);
 

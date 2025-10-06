@@ -41,7 +41,7 @@ function FeedDesign() {
        
         </div>
 
-        <Nav/>
+        {/* <Nav/> */}
 
         {/* Feed Posts */}
         <div className="flex-1 w-full px-6 py-6 overflow-y-auto bg-neutral-50">

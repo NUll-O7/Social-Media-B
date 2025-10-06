@@ -5,7 +5,7 @@ import { FiPlusSquare } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { addStory } from "../redux/storySlice";
 import { useNavigate } from "react-router-dom";
-import { createStory } from "../apiCalls/authCalls";
+import { createStory } from "../apiCalls/authCalls.js";
 
 function CreateStory() {
   const [frontendMedia, setFrontendMedia] = useState(null);

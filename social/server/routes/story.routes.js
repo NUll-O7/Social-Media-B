@@ -4,7 +4,6 @@ import {
   getAllStories,
   getUserStories,
   viewStory,
-  deleteStory,
   getMyStories,
 } from "../controllers/story.controllers.js";
 import isAuth from "../middlewares/isAuth.js";
@@ -28,6 +27,6 @@ storyRouter.get("/user/:userId", isAuth, getUserStories);
 storyRouter.post("/view/:storyId", isAuth, viewStory);
 
 // Delete a story
-storyRouter.delete("/:storyId", isAuth, deleteStory);
+// storyRouter.delete("/:storyId", isAuth, deleteStory);
 
 export default storyRouter;

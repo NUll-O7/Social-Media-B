@@ -196,16 +196,16 @@ export const viewStory = async (storyId) => {
 };
 
 // Delete a story
-export const deleteStory = async (storyId) => {
-  try {
-    const response = await api.delete(`/api/story/${storyId}`, {
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error) {
-    throw error.response?.data?.message || "Failed to delete story";
-  }
-};
+// export const deleteStory = async (storyId) => {
+//   try {
+//     const response = await api.delete(`/api/story/${storyId}`, {
+//       withCredentials: true,
+//     });
+//     return response.data;
+//   } catch (error) {
+//     throw error.response?.data?.message || "Failed to delete story";
+//   }
+// };
 
 // Message Calls
 

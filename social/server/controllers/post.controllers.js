@@ -46,13 +46,22 @@ export const uploadPost = async (req, res) => {
 
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find({}).populate(
-      "author",
-      "userName profileImage"
-    );
+    // Get current user with following list
+    const currentUser = await User.findById(req.userId);
+    
+    // Create array of user IDs to fetch posts from (followed users + self)
+    const userIds = [req.userId, ...currentUser.following];
+    
+    // Get posts only from these users
+    const posts = await Post.find({
+      author: { $in: userIds }
+    })
+      .populate("author", "name userName profileImage")
+      .sort({ createdAt: -1 }); // Latest posts first
+    
     return res.status(200).json(posts);
   } catch (error) {
-    return res.status(404).json({ message: "No Posts Found" });
+    return res.status(500).json({ message: `Cannot get posts error ${error}` });
   }
 };
 

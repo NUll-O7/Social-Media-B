@@ -36,20 +36,20 @@ const storySlice = createSlice({
       }
     },
 
-    removeStory: (state, action) => {
-      const storyId = action.payload;
+    // removeStory: (state, action) => {
+    //   const storyId = action.payload;
       
-      // Remove from myStories
-      state.myStories = state.myStories.filter(
-        (story) => story._id !== storyId
-      );
+    //   // Remove from myStories
+    //   state.myStories = state.myStories.filter(
+    //     (story) => story._id !== storyId
+    //   );
       
-      // Remove from allStories
-      state.allStories = state.allStories.map((group) => ({
-        ...group,
-        stories: group.stories.filter((story) => story._id !== storyId),
-      })).filter((group) => group.stories.length > 0);
-    },
+    //   // Remove from allStories
+    //   state.allStories = state.allStories.map((group) => ({
+    //     ...group,
+    //     stories: group.stories.filter((story) => story._id !== storyId),
+    //   })).filter((group) => group.stories.length > 0);
+    // },
 
     updateStoryViewers: (state, action) => {
       const updatedStory = action.payload;
